@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)file:///C:/Users/HP/Downloads/index_2.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khaled Hamdy | Red Team Penetration Tester</title>
+<link href="./Khaled Hamdy _ Red Team Penetration Tester_files/css2" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0d;
+  --bg2: #111318;
+  --surface: #13171f;
+  --border: #1e2433;
+  --kali-blue: #2677cc;
+  --kali-blue2: #367ee8;
+  --green: #39d353;
+  --green2: #00ff41;
+  --red: #ff4757;
+  --yellow: #ffa502;
+  --cyan: #00d2ff;
+  --purple: #a855f7;
+  --text: #cdd6f4;
+  --muted: #585b70;
+  --prompt: #89b4fa;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+.cursor {
+  position: fixed;
+  width: 20px; height: 20px;
+  border: 1.5px solid var(--green2);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transition: transform 0.1s ease, opacity 0.2s;
+  mix-blend-mode: screen;
+}
+.cursor-dot {
+  position: fixed;
+  width: 4px; height: 4px;
+  background: var(--green2);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
+  pointer-events: none;
+  z-index: 9998;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(13,13,13,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+}
+.nav-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 14px;
+  color: var(--green2);
+  letter-spacing: 2px;
+  margin-right: auto;
+  text-shadow: 0 0 12px rgba(0,255,65,0.4);
+}
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  display: block;
+  padding: 0 18px;
+  height: 52px;
+  line-height: 52px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  transition: color 0.2s, background 0.2s;
+  border-left: 1px solid var(--border);
+}
+.nav-links a:hover { color: var(--green2); background: rgba(0,255,65,0.04); }
+.nav-links a span { color: var(--kali-blue); margin-right: 6px; }
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 40px 60px;
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.hero-left { flex: 1; }
+.hero-right { flex: 0 0 360px; display: flex; justify-content: flex-end; align-items: center; }
+
+.terminal {
+  background: #0a0c10;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0,255,65,0.05), 0 24px 80px rgba(0,0,0,0.8);
+}
+.terminal-bar {
+  background: #1a1d27;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.t-dot { width: 12px; height: 12px; border-radius: 50%; }
+.t-red { background: #ff5f56; }
+.t-yellow { background: #febc2e; }
+.t-green { background: #28c840; }
+.terminal-title { margin-left: 8px; font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+.terminal-body { padding: 20px; font-size: 12.5px; line-height: 1.9; min-height: 320px; }
+.t-line { display: flex; gap: 8px; flex-wrap: wrap; }
+.t-prompt { color: var(--green2); flex-shrink: 0; }
+.t-user { color: var(--kali-blue2); }
+.t-at { color: var(--muted); }
+.t-host { color: var(--purple); }
+.t-path { color: var(--yellow); }
+.t-cmd { color: var(--text); }
+.t-out { color: #7c7f93; }
+.t-val { color: var(--cyan); }
+.t-red-t { color: var(--red); }
+.t-green-t { color: var(--green); }
+.t-blink { display: inline-block; width: 8px; height: 14px; background: var(--green2); vertical-align: middle; animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.hero-tag { font-size: 11px; letter-spacing: 4px; color: var(--kali-blue); text-transform: uppercase; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.6s 0.2s ease both; }
+.hero-name { font-family: 'Orbitron', monospace; font-size: clamp(32px, 5vw, 56px); font-weight: 900; color: #fff; line-height: 1.05; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s 0.35s ease both; }
+.hero-name .accent { color: var(--green2); text-shadow: 0 0 30px rgba(0,255,65,0.4); }
+.hero-role { font-size: 15px; color: var(--muted); margin-bottom: 36px; opacity: 0; animation: fadeUp 0.6s 0.5s ease both; }
+.hero-role .hl { color: var(--cyan); }
+.hero-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; opacity: 0; animation: fadeUp 0.6s 0.65s ease both; }
+.badge { padding: 5px 14px; border-radius: 3px; font-size: 11px; letter-spacing: 1px; font-weight: 500; }
+.badge-green { background: rgba(57,211,83,0.1); border: 1px solid rgba(57,211,83,0.3); color: var(--green); }
+.badge-blue { background: rgba(38,119,204,0.1); border: 1px solid rgba(38,119,204,0.35); color: var(--kali-blue2); }
+.badge-red { background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.3); color: var(--red); }
+.badge-purple { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: var(--purple); }
+.badge-yellow { background: rgba(255,165,2,0.1); border: 1px solid rgba(255,165,2,0.3); color: var(--yellow); }
+.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.6s 0.8s ease both; }
+.btn { padding: 11px 26px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; cursor: none; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--green2); color: #000; font-weight: 700; border: 1px solid var(--green2); }
+.btn-primary:hover { box-shadow: 0 0 24px rgba(0,255,65,0.4); transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--kali-blue2); color: var(--kali-blue2); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+section { max-width: 1100px; margin: 0 auto; padding: 80px 40px; position: relative; z-index: 1; }
+.section-label { font-size: 11px; letter-spacing: 4px; color: var(--kali-blue); text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.section-label::before { content: '//'; color: var(--green2); }
+.section-title { font-family: 'Orbitron', monospace; font-size: clamp(20px, 3vw, 30px); font-weight: 700; color: #fff; margin-bottom: 48px; }
+hr.sec-divider { border: none; border-top: 1px solid var(--border); margin: 0 40px; }
+
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.skill-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 24px; transition: border-color 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+.skill-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent-color, var(--green2)); opacity: 0.6; }
+.skill-card:hover { border-color: var(--accent-color, var(--green2)); box-shadow: 0 0 20px rgba(0,255,65,0.06); }
+.skill-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.skill-icon { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.skill-card-title { font-size: 13px; font-weight: 700; color: #e2e8f0; letter-spacing: 0.5px; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill-tag { padding: 3px 10px; border-radius: 2px; font-size: 10.5px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.5px; }
+
+.exp-list { display: flex; flex-direction: column; gap: 0; }
+.exp-item { display: grid; grid-template-columns: 160px 1fr; gap: 0 32px; padding: 28px 0; border-bottom: 1px solid var(--border); }
+.exp-item:last-child { border-bottom: none; }
+.exp-date { font-size: 11px; color: var(--muted); letter-spacing: 1px; padding-top: 3px; line-height: 1.6; }
+.exp-date strong { display: block; color: var(--cyan); font-size: 12px; margin-bottom: 4px; }
+.exp-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.exp-org { font-size: 12px; color: var(--kali-blue2); margin-bottom: 14px; letter-spacing: 0.5px; }
+.exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.exp-bullets li { font-size: 12.5px; color: #7c7f93; display: flex; gap: 10px; line-height: 1.6; }
+.exp-bullets li::before { content: '→'; color: var(--green2); flex-shrink: 0; }
+
+/* CERTS */
+.certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.cert-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  color: inherit;
+}
+.cert-card:hover { border-color: var(--kali-blue2); }
+
+/* Clickable CCNA cert */
+.cert-card.cert-clickable {
+  cursor: none;
+  position: relative;
+  border-color: rgba(0,210,255,0.3);
+}
+.cert-card.cert-clickable::after {
+  content: '↗ VIEW CERT';
+  position: absolute;
+  top: 12px; right: 12px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--cyan);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cert-card.cert-clickable:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 24px rgba(0,210,255,0.12);
+}
+.cert-card.cert-clickable:hover::after { opacity: 1; }
+
+.cert-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; background: rgba(38,119,204,0.12); border: 1px solid rgba(38,119,204,0.2); }
+.cert-name { font-size: 13px; font-weight: 700; color: #dde3f0; margin-bottom: 4px; line-height: 1.4; }
+.cert-issuer { font-size: 11px; color: var(--muted); letter-spacing: 0.5px; }
+.cert-status { display: inline-block; margin-top: 8px; padding: 2px 8px; border-radius: 2px; font-size: 10px; letter-spacing: 1px; }
+.cert-done { background: rgba(57,211,83,0.1); color: var(--green); border: 1px solid rgba(57,211,83,0.25); }
+.cert-progress { background: rgba(255,165,2,0.1); color: var(--yellow); border: 1px solid rgba(255,165,2,0.25); }
+.cert-planned { background: rgba(168,85,247,0.1); color: var(--purple); border: 1px solid rgba(168,85,247,0.25); }
+
+/* CERT MODAL */
+.cert-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+.cert-modal-overlay.active { display: flex; }
+.cert-modal {
+  background: var(--surface);
+  border: 1px solid var(--cyan);
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 92vw;
+  max-height: 92vh;
+  box-shadow: 0 0 80px rgba(0,210,255,0.2);
+  display: flex;
+  flex-direction: column;
+}
+.cert-modal-bar {
+  background: #1a1d27;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.cert-modal-title { font-size: 12px; color: var(--cyan); letter-spacing: 1.5px; }
+.cert-modal-close {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 5px 14px;
+  border-radius: 3px;
+  cursor: none;
+  transition: border-color 0.2s, color 0.2s;
+  letter-spacing: 1px;
+}
+.cert-modal-close:hover { border-color: var(--red); color: var(--red); }
+.cert-modal-img { max-width: 100%; max-height: calc(92vh - 60px); display: block; object-fit: contain; }
+
+/* STATS */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 60px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 24px; text-align: center; }
+.stat-num { font-family: 'Orbitron', monospace; font-size: 32px; font-weight: 900; color: var(--green2); text-shadow: 0 0 20px rgba(0,255,65,0.3); margin-bottom: 6px; }
+.stat-label { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.contact-info { display: flex; flex-direction: column; gap: 14px; }
+.contact-link { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; text-decoration: none; color: var(--text); font-size: 13px; transition: border-color 0.2s, color 0.2s; }
+.contact-link:hover { border-color: var(--green2); color: var(--green2); }
+.contact-link .cl-icon { font-size: 18px; width: 30px; text-align: center; }
+.contact-link .cl-label { color: var(--muted); font-size: 10px; letter-spacing: 1px; display: block; margin-bottom: 2px; }
+.contact-link .cl-val { font-size: 13px; }
+.mini-terminal { background: #0a0c10; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.mini-terminal .terminal-body { min-height: 200px; }
+
+footer { border-top: 1px solid var(--border); padding: 24px 40px; text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 1px; position: relative; z-index: 1; }
+footer span { color: var(--green2); }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { flex-direction: column; padding: 100px 20px 40px; gap: 40px; }
+  .hero-right { flex: 0 0 auto; width: 100%; justify-content: center; }
+  section { padding: 60px 20px; }
+  .exp-item { grid-template-columns: 1fr; gap: 8px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .contact-grid { grid-template-columns: 1fr; }
+  hr.sec-divider { margin: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor" style="left: 789px; top: -9px;"></div>
+<div class="cursor-dot" id="cursorDot" style="left: 799px; top: 1px;"></div>
+
+<!-- CERT MODAL -->
+<div class="cert-modal-overlay" id="certModal">
+  <div class="cert-modal">
+    <div class="cert-modal-bar">
+      <span class="cert-modal-title" id="certModalTitle">CERTIFICATE</span>
+      <button class="cert-modal-close" onclick="closeCertModal()">✕ CLOSE</button>
+    </div>
+    <img class="cert-modal-img" id="certModalImg" src="file:///C:/Users/HP/Downloads/index_2.html" alt="Certificate">
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">KH@R3DTEAM:~$</div>
+  <ul class="nav-links">
+    <li><a href="file:///C:/Users/HP/Downloads/index_2.html#skills"><span>01</span>skills</a></li>
+    <li><a href="file:///C:/Users/HP/Downloads/index_2.html#experience"><span>02</span>experience</a></li>
+    <li><a href="file:///C:/Users/HP/Downloads/index_2.html#certs"><span>03</span>certs</a></li>
+    <li><a href="file:///C:/Users/HP/Downloads/index_2.html#contact"><span>04</span>contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">// Red Team | Penetration Tester | Offensive Security</div>
+    <h1 class="hero-name">KHALED<br><span class="accent">HAMDY</span></h1>
+    <p class="hero-role">Junior <span class="hl">Red Team Operator</span> · Mansoura University CCE '27<br>Bug Bounty · CTF · Ethical Hacking · Egypt</p>
+    <div class="hero-badges">
+      <span class="badge badge-green">✓ Kali Linux</span>
+      <span class="badge badge-blue">✓ Metasploit</span>
+      <span class="badge badge-red">✓ Burp Suite</span>
+      <span class="badge badge-purple">✓ Active Directory</span>
+      <span class="badge badge-yellow">✓ Python</span>
+      <span class="badge badge-blue">✓ Wireshark</span>
+    </div>
+    <div class="hero-cta">
+      <a href="file:///C:/Users/HP/Downloads/Khaled_Hamdy_CV.pdf" class="btn btn-primary">⬇ Download CV</a>
+      <a href="file:///C:/Users/HP/Downloads/index_2.html#contact" class="btn btn-ghost">→ Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="terminal" style="width:340px">
+      <div class="terminal-bar">
+        <div class="t-dot t-red"></div>
+        <div class="t-dot t-yellow"></div>
+        <div class="t-dot t-green"></div>
+        <span class="terminal-title">kali@khaled — bash — 80×24</span>
+      </div>
+      <div class="terminal-body" id="typedTerminal"><div class="t-line"><span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-cmd" id="typeSpan">whoami</span></div><div class="t-line"><span style="padding-left:20px"><span class="t-val">khaled_hamdy</span> <span class="t-out">// red_team_operator</span></span></div><div class="t-line"><span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-cmd" id="typeSpan">cat skills.txt</span></div><div class="t-line"><span style="padding-left:20px"><span class="t-green-t">pentesting</span> | <span class="t-red-t">exploitation</span> | <span class="t-val">AD attacks</span></span></div><div class="t-line"><span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-cmd" id="typeSpan">nmap -sV target.corp</span></div><div class="t-line"><span style="padding-left:20px"><span class="t-out">80/tcp</span>  <span class="t-green-t">open</span>  <span class="t-val">http</span></span></div><div class="t-line"><span style="padding-left:20px"><span class="t-out">443/tcp</span> <span class="t-green-t">open</span>  <span class="t-val">https</span></span></div><div class="t-line"><span style="padding-left:20px"><span class="t-out">445/tcp</span> <span class="t-green-t">open</span>  <span class="t-val">smb</span> <span class="t-red-t">← interesting</span></span></div><div class="t-line"><span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-cmd" id="typeSpan">python3 exploit.py --target 10.10.10.1</span></div><div class="t-line"><span style="padding-left:20px"><span class="t-green-t">[+] Shell obtained. Welcome, root.</span></span></div><div class="t-line"><span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-blink"></span></div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="sec-divider">
+
+<!-- STATS -->
+<section>
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">3.4</div>
+      <div class="stat-label">GPA / 4.0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">180+</div>
+      <div class="stat-label">Lab Hours</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2+</div>
+      <div class="stat-label">Years Active</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">10+</div>
+      <div class="stat-label">Tools Mastered</div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div id="skills">
+    <div class="section-label">Technical Arsenal</div>
+    <div class="section-title">Skills &amp; Tools</div>
+    <div class="skills-grid">
+      <div class="skill-card" style="--accent-color: #ff4757">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.2)">⚔️</div>
+          <div class="skill-card-title">Offensive Security</div>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Reconnaissance</span><span class="skill-tag">Scanning</span><span class="skill-tag">Enumeration</span><span class="skill-tag">Exploitation</span><span class="skill-tag">Privilege Escalation</span><span class="skill-tag">Post-Exploitation</span><span class="skill-tag">Lateral Movement</span>
+        </div>
+      </div>
+      <div class="skill-card" style="--accent-color: #39d353">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background:rgba(57,211,83,0.1);border:1px solid rgba(57,211,83,0.2)">🐉</div>
+          <div class="skill-card-title">Penetration Testing Tools</div>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Kali Linux</span><span class="skill-tag">Metasploit</span><span class="skill-tag">Nmap</span><span class="skill-tag">Burp Suite</span><span class="skill-tag">Wireshark</span><span class="skill-tag">Nikto</span><span class="skill-tag">Gobuster</span>
+        </div>
+      </div>
+      <div class="skill-card" style="--accent-color: #a855f7">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2)">🏰</div>
+          <div class="skill-card-title">Active Directory Attacks</div>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Kerberoasting</span><span class="skill-tag">Pass-the-Hash</span><span class="skill-tag">BloodHound</span><span class="skill-tag">Mimikatz</span><span class="skill-tag">DCSync</span><span class="skill-tag">AS-REP Roasting</span>
+        </div>
+      </div>
+      <div class="skill-card" style="--accent-color: #00d2ff">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2)">🌐</div>
+          <div class="skill-card-title">Web Application Testing</div>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">SQLi</span><span class="skill-tag">XSS</span><span class="skill-tag">IDOR</span><span class="skill-tag">SSRF</span><span class="skill-tag">Auth Bypass</span><span class="skill-tag">OWASP Top 10</span><span class="skill-tag">API Testing</span>
+        </div>
+      </div>
+      <div class="skill-card" style="--accent-color: #2677cc">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background:rgba(38,119,204,0.1);border:1px solid rgba(38,119,204,0.2)">🔗</div>
+          <div class="skill-card-title">Networking</div>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">TCP/IP</span><span class="skill-tag">VLANs</span><span class="skill-tag">VPN</span><span class="skill-tag">Firewalls</span><span class="skill-tag">ACLs</span><span class="skill-tag">Routing</span><span class="skill-tag">OSPF</span><span class="skill-tag">Subnetting</span>
+        </div>
+      </div>
+      <div class="skill-card" style="--accent-color: #ffa502">
+        <div class="skill-card-header">
+          <div class="skill-icon" style="background:rgba(255,165,2,0.1);border:1px solid rgba(255,165,2,0.2)">🐍</div>
+          <div class="skill-card-title">Programming &amp; Scripting</div>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span><span class="skill-tag">Bash Scripting</span><span class="skill-tag">Port Scanners</span><span class="skill-tag">Exploit Scripts</span><span class="skill-tag">Automation Tools</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Engagements</div>
+  <div class="section-title">Experience &amp; Training</div>
+  <div class="exp-list">
+    <div class="exp-item">
+      <div class="exp-date"><strong>2023 – PRESENT</strong>Remote</div>
+      <div class="exp-content">
+        <div class="exp-title">Red Team Operator — Personal Lab &amp; Projects</div>
+        <div class="exp-org">Independent Security Research</div>
+        <ul class="exp-bullets">
+          <li>Conducted full-cycle penetration tests in home lab: recon → exploitation → report.</li>
+          <li>Built custom Python tools for port scanning, banner grabbing, and brute-forcing.</li>
+          <li>Practiced advanced techniques: privilege escalation, lateral movement, post-exploitation.</li>
+          <li>Active on TryHackMe — completed paths covering web exploitation, network attacks, and AD attacks.</li>
+          <li>Participated in CTF competitions and published writeups documenting methodologies.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date"><strong>2022 – PRESENT</strong>Remote</div>
+      <div class="exp-content">
+        <div class="exp-title">Bug Bounty Researcher</div>
+        <div class="exp-org">HackerOne · Bugcrowd</div>
+        <ul class="exp-bullets">
+          <li>Discovered and responsibly disclosed critical web vulnerabilities including XSS, SQLi, IDOR, and authentication bypasses.</li>
+          <li>Received acknowledgments and bounties from major organizations.</li>
+          <li>Focused on web application security, REST API testing, and mobile app attack surfaces.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-date"><strong>180+ Hours</strong>Jul – Oct 2025</div>
+      <div class="exp-content">
+        <div class="exp-title">Network Engineering Trainee — CCNA</div>
+        <div class="exp-org">OneLab Training Center · Mansoura, Egypt</div>
+        <ul class="exp-bullets">
+          <li>Completed 180+ hours of hands-on enterprise networking with Cisco technologies.</li>
+          <li>Configured VLANs, OSPF routing, ACLs, VPNs, and firewall rules in GNS3 lab environments.</li>
+          <li>Earned CCNA training certification upon completion.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- CERTS -->
+<section id="certs">
+  <div class="section-label">Credentials</div>
+  <div class="section-title">Certifications</div>
+  <div class="certs-grid">
+
+    <!-- CCNA — Clickable, opens modal -->
+    <div class="cert-card cert-clickable" onclick="openCertModal(&#39;CCNA_Certificate.png&#39;, &#39;CCNA — Cisco Certified Network Associate&#39;)">
+      <div class="cert-icon" style="background:rgba(0,210,255,0.12);border:1px solid rgba(0,210,255,0.25)">🔗</div>
+      <div>
+        <div class="cert-name">CCNA — Cisco Certified Network Associate</div>
+        <div class="cert-issuer">OneLab Training Center · 180 Hours · Jul–Oct 2025</div>
+        <span class="cert-status cert-done">✓ COMPLETED</span>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon">🏅</div>
+      <div>
+        <div class="cert-name">Career Essentials in Cybersecurity</div>
+        <div class="cert-issuer">Microsoft &amp; LinkedIn Learning</div>
+        <span class="cert-status cert-done">✓ COMPLETED</span>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon">🛡️</div>
+      <div>
+        <div class="cert-name">Introduction to Cybersecurity</div>
+        <div class="cert-issuer">Cisco Networking Academy</div>
+        <span class="cert-status cert-done">✓ COMPLETED</span>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon">⚡</div>
+      <div>
+        <div class="cert-name">eJPT — eLearnSecurity Junior PT</div>
+        <div class="cert-issuer">INE Security</div>
+        <span class="cert-status cert-progress">⟳ IN PROGRESS</span>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon">🎯</div>
+      <div>
+        <div class="cert-name">CEH — Certified Ethical Hacker</div>
+        <div class="cert-issuer">EC-Council</div>
+        <span class="cert-status cert-planned">◎ PLANNED 2025</span>
+      </div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-icon">💀</div>
+      <div>
+        <div class="cert-name">OSCP — Offensive Security Certified Professional</div>
+        <div class="cert-issuer">Offensive Security</div>
+        <span class="cert-status cert-planned">◎ PLANNED 2026</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Reach Out</div>
+  <div class="section-title">Contact</div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <a href="mailto:khalidhamdy37@gmail.com" class="contact-link">
+        <span class="cl-icon">✉</span>
+        <div><span class="cl-label">EMAIL</span><span class="cl-val">khalidhamdy37@gmail.com</span></div>
+      </a>
+      <a href="https://github.com/khaledhamdy404" target="_blank" class="contact-link">
+        <span class="cl-icon">⌥</span>
+        <div><span class="cl-label">GITHUB</span><span class="cl-val">github.com/khaledhamdy404</span></div>
+      </a>
+      <a href="https://linkedin.com/in/khalidhamdy" target="_blank" class="contact-link">
+        <span class="cl-icon">in</span>
+        <div><span class="cl-label">LINKEDIN</span><span class="cl-val">linkedin.com/in/khalidhamdy</span></div>
+      </a>
+      <a href="https://www.hackerone.com/" target="_blank" class="contact-link">
+        <span class="cl-icon">🏴</span>
+        <div><span class="cl-label">BUG BOUNTY</span><span class="cl-val">HackerOne · Bugcrowd</span></div>
+      </a>
+    </div>
+    <div class="mini-terminal">
+      <div class="terminal-bar">
+        <div class="t-dot t-red"></div>
+        <div class="t-dot t-yellow"></div>
+        <div class="t-dot t-green"></div>
+        <span class="terminal-title">whois khaled_hamdy</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-out">name</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Khaled Hamdy Mahmoud</span></div>
+        <div class="t-line"><span class="t-out">role</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Junior Red Team Operator</span></div>
+        <div class="t-line"><span class="t-out">location</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Egypt 🇪🇬</span></div>
+        <div class="t-line"><span class="t-out">university</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Mansoura · CCE · 2027</span></div>
+        <div class="t-line"><span class="t-out">status</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-green-t">open_to_work = true</span></div>
+        <div class="t-line"><span class="t-out">focus</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Offensive Security</span></div>
+        <div class="t-line"><span class="t-out">platforms</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">TryHackMe · HTB · H1</span></div>
+        <br>
+        <div class="t-line"><span class="t-prompt">$</span>&nbsp;<span class="t-cmd">cat motto.txt</span></div>
+        <div class="t-line"><span style="color:#7c7f93;font-style:italic">"Think like an attacker. Build like a defender."</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>KH@R3DTEAM</span> · Khaled Hamdy · Egypt · 2026 · All rights reserved
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const dot = document.getElementById('cursorDot');
+document.addEventListener('mousemove', e => {
+  dot.style.left = e.clientX + 'px';
+  dot.style.top = e.clientY + 'px';
+  cursor.style.left = (e.clientX - 10) + 'px';
+  cursor.style.top = (e.clientY - 10) + 'px';
+});
+
+// CERT MODAL
+function openCertModal(imgSrc, title) {
+  document.getElementById('certModalImg').src = imgSrc;
+  document.getElementById('certModalTitle').textContent = title;
+  document.getElementById('certModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeCertModal() {
+  document.getElementById('certModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.getElementById('certModal').addEventListener('click', function(e) {
+  if (e.target === this) closeCertModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCertModal(); });
+
+// TERMINAL TYPEWRITER
+const lines = [
+  { type: 'prompt', text: 'whoami' },
+  { type: 'output', text: '<span class="t-val">khaled_hamdy</span> <span class="t-out">// red_team_operator</span>' },
+  { type: 'prompt', text: 'cat skills.txt' },
+  { type: 'output', text: '<span class="t-green-t">pentesting</span> | <span class="t-red-t">exploitation</span> | <span class="t-val">AD attacks</span>' },
+  { type: 'prompt', text: 'nmap -sV target.corp' },
+  { type: 'output', text: '<span class="t-out">80/tcp</span>  <span class="t-green-t">open</span>  <span class="t-val">http</span>' },
+  { type: 'output', text: '<span class="t-out">443/tcp</span> <span class="t-green-t">open</span>  <span class="t-val">https</span>' },
+  { type: 'output', text: '<span class="t-out">445/tcp</span> <span class="t-green-t">open</span>  <span class="t-val">smb</span> <span class="t-red-t">← interesting</span>' },
+  { type: 'prompt', text: 'python3 exploit.py --target 10.10.10.1' },
+  { type: 'output', text: '<span class="t-green-t">[+] Shell obtained. Welcome, root.</span>' },
+  { type: 'cursor', text: '' },
+];
+
+const tb = document.getElementById('typedTerminal');
+let li = 0;
+
+function makePromptLine() {
+  const div = document.createElement('div');
+  div.className = 't-line';
+  div.innerHTML = `<span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-cmd" id="typeSpan"></span><span class="t-blink" id="typeBlink"></span>`;
+  return div;
+}
+
+function typeLine(spanEl, blinkEl, text, cb) {
+  let i = 0;
+  const interval = setInterval(() => {
+    spanEl.textContent += text[i]; i++;
+    if (i >= text.length) { clearInterval(interval); if (cb) cb(); }
+  }, 40);
+}
+
+function renderNext() {
+  if (li >= lines.length) return;
+  const line = lines[li++];
+  if (line.type === 'prompt') {
+    const div = makePromptLine();
+    tb.appendChild(div);
+    typeLine(div.querySelector('#typeSpan'), div.querySelector('#typeBlink'), line.text, () => {
+      div.querySelector('#typeBlink').remove();
+      setTimeout(renderNext, 300);
+    });
+  } else if (line.type === 'output') {
+    const div = document.createElement('div');
+    div.className = 't-line';
+    div.innerHTML = `<span style="padding-left:20px">${line.text}</span>`;
+    tb.appendChild(div);
+    setTimeout(renderNext, 80);
+  } else if (line.type === 'cursor') {
+    const div = document.createElement('div');
+    div.className = 't-line';
+    div.innerHTML = `<span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-blink"></span>`;
+    tb.appendChild(div);
+  }
+}
+setTimeout(renderNext, 800);
+</script>
+
+
+</body></html>
