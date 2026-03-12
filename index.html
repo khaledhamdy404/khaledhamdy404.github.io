@@ -138,6 +138,58 @@ hr.sec-divider { border:none; border-top:1px solid var(--border); margin:0 40px;
 footer { border-top:1px solid var(--border); padding:24px 40px; text-align:center; font-size:11px; color:var(--muted); letter-spacing:1px; position:relative; z-index:1; }
 footer span { color:var(--green2); }
 
+/* ── PROJECTS SECTION ─────────────────────────────────── */
+.projects-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; }
+
+.proj-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  transition:border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  position:relative;
+  overflow:hidden;
+}
+.proj-card::before {
+  content:'';
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:2px;
+  background:var(--border);
+  transition:background 0.25s;
+}
+.proj-card:hover { border-color:rgba(0,255,65,0.25); transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,0.4); }
+.proj-card:hover::before { background:var(--green2); }
+.proj-card.featured { border-color:rgba(0,255,65,0.18); }
+.proj-card.featured::before { background:linear-gradient(90deg, var(--green2), var(--cyan)); }
+
+.proj-card-top { display:flex; justify-content:space-between; align-items:center; min-height:20px; }
+.proj-badge { font-family:'Orbitron',monospace; font-size:8px; color:#000; background:var(--green2); padding:2px 8px; border-radius:2px; letter-spacing:2px; font-weight:900; }
+.proj-status { font-size:10px; letter-spacing:1px; }
+.proj-status.live   { color:var(--green); }
+.proj-status.wip    { color:var(--yellow); }
+.proj-status.done   { color:var(--cyan); }
+
+.proj-icon { font-size:28px; line-height:1; }
+
+.proj-title { font-family:'Orbitron',monospace; font-size:13px; color:#e2e8f0; letter-spacing:1.5px; line-height:1.4; }
+
+.proj-desc { font-size:12px; color:var(--muted); line-height:1.75; flex:1; }
+
+.proj-tech { display:flex; flex-wrap:wrap; gap:6px; }
+.proj-tech span { font-size:10px; color:var(--cyan); background:rgba(0,210,255,0.06); border:1px solid rgba(0,210,255,0.2); padding:2px 8px; border-radius:2px; letter-spacing:0.5px; }
+
+.proj-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
+.proj-btn { font-family:'JetBrains Mono',monospace; font-size:11px; padding:7px 16px; border-radius:3px; text-decoration:none; letter-spacing:1px; transition:all 0.2s; cursor:none; }
+.proj-btn.primary { background:rgba(0,255,65,0.08); color:var(--green2); border:1px solid rgba(0,255,65,0.35); }
+.proj-btn.primary:hover { background:var(--green2); color:#000; box-shadow:0 0 16px rgba(0,255,65,0.3); }
+.proj-btn.secondary { background:transparent; color:var(--muted); border:1px solid var(--border); }
+.proj-btn.secondary:hover { color:var(--text); border-color:rgba(255,255,255,0.2); }
+/* ── END PROJECTS ─────────────────────────────────────── */
+
 @media (max-width:768px) {
   nav { padding:0 20px; } .nav-links { display:none; }
   .hero { flex-direction:column; padding:100px 20px 40px; gap:40px; }
@@ -148,6 +200,7 @@ footer span { color:var(--green2); }
   .contact-grid { grid-template-columns:1fr; }
   hr.sec-divider { margin:0 20px; }
   .cert-modal-pdf { width:95vw; }
+  .projects-grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -177,7 +230,8 @@ footer span { color:var(--green2); }
     <li><a href="#skills"><span>01</span>skills</a></li>
     <li><a href="#experience"><span>02</span>experience</a></li>
     <li><a href="#certs"><span>03</span>certs</a></li>
-    <li><a href="#contact"><span>04</span>contact</a></li>
+    <li><a href="#projects"><span>04</span>projects</a></li>
+    <li><a href="#contact"><span>05</span>contact</a></li>
   </ul>
 </nav>
 
@@ -310,7 +364,6 @@ footer span { color:var(--green2); }
   <div class="section-title">Certifications</div>
   <div class="certs-grid">
 
-    <!-- CCNA — .jpg file in repo -->
     <div class="cert-card clickable"
          onclick="openCert('img','Cisco%20Certified%20Network%20Associate.jpg','CCNA — Cisco Certified Network Associate')">
       <div class="cert-icon" style="background:rgba(0,210,255,0.12);border:1px solid rgba(0,210,255,0.25)">🔗</div>
@@ -321,7 +374,6 @@ footer span { color:var(--green2); }
       </div>
     </div>
 
-    <!-- Microsoft cert — PDF with spaces encoded as %20 -->
     <div class="cert-card clickable"
          onclick="openCert('pdf','CertificateOfCompletion_Career%20Essentials%20in%20Cybersecurity%20by%20Microsoft%20and%20LinkedIn.pdf','Career Essentials in Cybersecurity — Microsoft & LinkedIn')">
       <div class="cert-icon">🏅</div>
@@ -332,7 +384,6 @@ footer span { color:var(--green2); }
       </div>
     </div>
 
-    <!-- Cisco Intro cert — PDF, no spaces in filename -->
     <div class="cert-card clickable"
          onclick="openCert('pdf','Introduction_to_Cybersecurity_certificate_khalidhamdy37-gmail-com_0062e221-8873-447d-8096-1c104d353fc6.pdf','Introduction to Cybersecurity — Cisco Networking Academy')">
       <div class="cert-icon">🛡️</div>
@@ -343,7 +394,6 @@ footer span { color:var(--green2); }
       </div>
     </div>
 
-    <!-- eJPT — not yet earned -->
     <div class="cert-card no-link">
       <div class="cert-icon">⚡</div>
       <div>
@@ -353,7 +403,6 @@ footer span { color:var(--green2); }
       </div>
     </div>
 
-    <!-- CEH -->
     <div class="cert-card no-link">
       <div class="cert-icon">🎯</div>
       <div>
@@ -363,13 +412,96 @@ footer span { color:var(--green2); }
       </div>
     </div>
 
-    <!-- OSCP -->
     <div class="cert-card no-link">
       <div class="cert-icon">💀</div>
       <div>
         <div class="cert-name">OSCP — Offensive Security Certified Professional</div>
         <div class="cert-issuer">Offensive Security</div>
         <span class="cert-status cert-planned">◎ PLANNED 2026</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- ══════════════════════════════════════════════════════
+     PROJECTS SECTION
+     ══════════════════════════════════════════════════════ -->
+<section id="projects">
+  <div class="section-label">Built & Deployed</div>
+  <div class="section-title">Projects</div>
+  <div class="projects-grid">
+
+    <!-- Malware Sandbox — FEATURED, LIVE -->
+    <div class="proj-card featured">
+      <div class="proj-card-top">
+        <div class="proj-badge">FEATURED</div>
+        <div class="proj-status live">● LIVE</div>
+      </div>
+      <div class="proj-icon">⚠</div>
+      <div class="proj-title">Malware Sandbox Simulator</div>
+      <p class="proj-desc">
+        Browser-based malware analysis platform simulating real sandbox behavior —
+        static string extraction, dynamic VM detonation, C2 network traffic detection,
+        behavior classification (Ransomware / RAT), and full threat reporting.
+      </p>
+      <div class="proj-tech">
+        <span>React</span>
+        <span>Malware Analysis</span>
+        <span>Dynamic Analysis</span>
+        <span>C2 Detection</span>
+        <span>Threat Intel</span>
+      </div>
+      <div class="proj-actions">
+        <a href="https://malware-sandbox-chi.vercel.app/" target="_blank" class="proj-btn primary">[ LAUNCH SANDBOX ]</a>
+        <a href="https://github.com/khaledhamdy404" target="_blank" class="proj-btn secondary">[ GITHUB ]</a>
+      </div>
+    </div>
+
+    <!-- Python Recon Toolkit -->
+    <div class="proj-card">
+      <div class="proj-card-top">
+        <div class="proj-status wip">⟳ IN PROGRESS</div>
+      </div>
+      <div class="proj-icon">🔍</div>
+      <div class="proj-title">Python Recon Toolkit</div>
+      <p class="proj-desc">
+        Custom Python toolset for network reconnaissance — port scanning,
+        banner grabbing, service enumeration, and automated report generation.
+      </p>
+      <div class="proj-tech">
+        <span>Python</span>
+        <span>Sockets</span>
+        <span>Nmap</span>
+        <span>Recon</span>
+      </div>
+      <div class="proj-actions">
+        <a href="https://github.com/khaledhamdy404" target="_blank" class="proj-btn secondary">[ GITHUB ]</a>
+      </div>
+    </div>
+
+    <!-- CTF Writeups -->
+    <div class="proj-card">
+      <div class="proj-card-top">
+        <div class="proj-status live">● ACTIVE</div>
+      </div>
+      <div class="proj-icon">🏴</div>
+      <div class="proj-title">CTF Writeups</div>
+      <p class="proj-desc">
+        Documented solutions for TryHackMe and HackTheBox challenges —
+        web exploitation, privilege escalation, Active Directory attacks,
+        and network forensics with full methodology breakdowns.
+      </p>
+      <div class="proj-tech">
+        <span>TryHackMe</span>
+        <span>HackTheBox</span>
+        <span>Web Exploitation</span>
+        <span>AD Attacks</span>
+      </div>
+      <div class="proj-actions">
+        <a href="https://github.com/khaledhamdy404" target="_blank" class="proj-btn secondary">[ VIEW WRITEUPS ]</a>
       </div>
     </div>
 
@@ -438,14 +570,11 @@ document.addEventListener('mousemove', e => {
 });
 
 // CERT MODAL
-// type = 'img' | 'pdf'
-// file = URL-encoded filename matching exactly what is in the GitHub repo
 function openCert(type, file, title) {
   document.getElementById('certModalTitle').textContent = title;
   document.getElementById('certModalDownload').href = file;
   const body = document.getElementById('certModalBody');
   body.innerHTML = '';
-
   if (type === 'img') {
     const img = document.createElement('img');
     img.className = 'cert-modal-img';
@@ -453,14 +582,12 @@ function openCert(type, file, title) {
     img.alt = title;
     body.appendChild(img);
   } else {
-    // Embed PDF in iframe — works in Chrome, Firefox, Edge
     const iframe = document.createElement('iframe');
     iframe.className = 'cert-modal-pdf';
     iframe.src = file;
     iframe.title = title;
     body.appendChild(iframe);
   }
-
   document.getElementById('certModal').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
