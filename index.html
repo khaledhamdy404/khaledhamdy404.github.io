@@ -1,661 +1,746 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Khaled Hamdy | Red Team Penetration Tester</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0d0d0d; --bg2: #111318; --surface: #13171f; --border: #1e2433;
-  --kali-blue: #2677cc; --kali-blue2: #367ee8; --green: #39d353; --green2: #00ff41;
-  --red: #ff4757; --yellow: #ffa502; --cyan: #00d2ff; --purple: #a855f7;
-  --text: #cdd6f4; --muted: #585b70;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body { background:var(--bg); color:var(--text); font-family:'JetBrains Mono',monospace; font-size:14px; cursor:none; overflow-x:hidden; }
-.cursor { position:fixed; width:20px; height:20px; border:1.5px solid var(--green2); border-radius:50%; pointer-events:none; z-index:99999; transition:transform 0.1s; mix-blend-mode:screen; }
-.cursor-dot { position:fixed; width:4px; height:4px; background:var(--green2); border-radius:50%; pointer-events:none; z-index:99999; transform:translate(-50%,-50%); }
-body::after { content:''; position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px); pointer-events:none; z-index:9998; }
-body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; opacity:0.4; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khaled Hamdy — Offensive Security Engineer</title>
 
-nav { position:fixed; top:0; left:0; right:0; z-index:1000; background:rgba(13,13,13,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:0 40px; height:52px; display:flex; align-items:center; }
-.nav-logo { font-family:'Orbitron',monospace; font-size:14px; color:var(--green2); letter-spacing:2px; margin-right:auto; text-shadow:0 0 12px rgba(0,255,65,0.4); }
-.nav-links { display:flex; list-style:none; }
-.nav-links a { display:block; padding:0 18px; height:52px; line-height:52px; color:var(--muted); text-decoration:none; font-size:12px; letter-spacing:1px; transition:color 0.2s,background 0.2s; border-left:1px solid var(--border); }
-.nav-links a:hover { color:var(--green2); background:rgba(0,255,65,0.04); }
-.nav-links a span { color:var(--kali-blue); margin-right:6px; }
+  <!-- SEO -->
+  <meta name="description" content="Khaled Hamdy — Offensive Security Engineer & Penetration Tester based in Egypt. Specializing in Red Team operations, network exploitation, and web application security." />
+  <meta name="keywords" content="penetration tester, red team, offensive security, ethical hacker, bug bounty, CCNA, Mansoura, Egypt, cybersecurity engineer" />
+  <meta name="author" content="Khaled Hamdy" />
+  <meta property="og:title" content="Khaled Hamdy — Offensive Security Engineer" />
+  <meta property="og:description" content="Red Team Operator & Penetration Tester. Engineered attacks. Documented methodologies. Open to work." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://khaledhamdy404.github.io/" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-.hero { min-height:100vh; display:flex; align-items:center; padding:100px 40px 60px; position:relative; z-index:1; max-width:1100px; margin:0 auto; }
-.hero-left { flex:1; }
-.hero-right { flex:0 0 360px; display:flex; justify-content:flex-end; align-items:center; }
-.terminal { background:#0a0c10; border:1px solid var(--border); border-radius:8px; overflow:hidden; box-shadow:0 0 60px rgba(0,255,65,0.05),0 24px 80px rgba(0,0,0,0.8); }
-.terminal-bar { background:#1a1d27; padding:10px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
-.t-dot { width:12px; height:12px; border-radius:50%; }
-.t-red { background:#ff5f56; } .t-yellow { background:#febc2e; } .t-green { background:#28c840; }
-.terminal-title { margin-left:8px; font-size:11px; color:var(--muted); letter-spacing:1px; }
-.terminal-body { padding:20px; font-size:12.5px; line-height:1.9; min-height:320px; }
-.t-line { display:flex; gap:8px; flex-wrap:wrap; }
-.t-prompt { color:var(--green2); flex-shrink:0; } .t-user { color:var(--kali-blue2); } .t-at { color:var(--muted); }
-.t-host { color:var(--purple); } .t-path { color:var(--yellow); } .t-cmd { color:var(--text); }
-.t-out { color:#7c7f93; } .t-val { color:var(--cyan); } .t-red-t { color:var(--red); } .t-green-t { color:var(--green); }
-.t-blink { display:inline-block; width:8px; height:14px; background:var(--green2); vertical-align:middle; animation:blink 1s step-end infinite; }
-@keyframes blink { 50% { opacity:0; } }
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Bebas+Neue&display=swap" rel="stylesheet" />
 
-.hero-tag { font-size:11px; letter-spacing:4px; color:var(--kali-blue); text-transform:uppercase; margin-bottom:20px; opacity:0; animation:fadeUp 0.6s 0.2s ease both; }
-.hero-name { font-family:'Orbitron',monospace; font-size:clamp(32px,5vw,56px); font-weight:900; color:#fff; line-height:1.05; margin-bottom:16px; opacity:0; animation:fadeUp 0.6s 0.35s ease both; }
-.hero-name .accent { color:var(--green2); text-shadow:0 0 30px rgba(0,255,65,0.4); }
-.hero-role { font-size:15px; color:var(--muted); margin-bottom:36px; opacity:0; animation:fadeUp 0.6s 0.5s ease both; }
-.hero-role .hl { color:var(--cyan); }
-.hero-badges { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:40px; opacity:0; animation:fadeUp 0.6s 0.65s ease both; }
-.badge { padding:5px 14px; border-radius:3px; font-size:11px; letter-spacing:1px; font-weight:500; }
-.badge-green { background:rgba(57,211,83,0.1); border:1px solid rgba(57,211,83,0.3); color:var(--green); }
-.badge-blue { background:rgba(38,119,204,0.1); border:1px solid rgba(38,119,204,0.35); color:var(--kali-blue2); }
-.badge-red { background:rgba(255,71,87,0.1); border:1px solid rgba(255,71,87,0.3); color:var(--red); }
-.badge-purple { background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); color:var(--purple); }
-.badge-yellow { background:rgba(255,165,2,0.1); border:1px solid rgba(255,165,2,0.3); color:var(--yellow); }
-.hero-cta { display:flex; gap:14px; flex-wrap:wrap; opacity:0; animation:fadeUp 0.6s 0.8s ease both; }
-.btn { padding:11px 26px; border-radius:4px; font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:1px; cursor:none; text-decoration:none; transition:all 0.2s; display:inline-flex; align-items:center; gap:8px; }
-.btn-primary { background:var(--green2); color:#000; font-weight:700; border:1px solid var(--green2); }
-.btn-primary:hover { box-shadow:0 0 24px rgba(0,255,65,0.4); transform:translateY(-1px); }
-.btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); }
-.btn-ghost:hover { border-color:var(--kali-blue2); color:var(--kali-blue2); }
-@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-
-section { max-width:1100px; margin:0 auto; padding:80px 40px; position:relative; z-index:1; }
-.section-label { font-size:11px; letter-spacing:4px; color:var(--kali-blue); text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
-.section-label::before { content:'//'; color:var(--green2); }
-.section-title { font-family:'Orbitron',monospace; font-size:clamp(20px,3vw,30px); font-weight:700; color:#fff; margin-bottom:48px; }
-hr.sec-divider { border:none; border-top:1px solid var(--border); margin:0 40px; }
-
-.skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
-.skill-card { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; transition:border-color 0.2s,box-shadow 0.2s; position:relative; overflow:hidden; }
-.skill-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent-color,var(--green2)); opacity:0.6; }
-.skill-card:hover { border-color:var(--accent-color,var(--green2)); box-shadow:0 0 20px rgba(0,255,65,0.06); }
-.skill-card-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
-.skill-icon { width:36px; height:36px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
-.skill-card-title { font-size:13px; font-weight:700; color:#e2e8f0; letter-spacing:0.5px; }
-.skill-tags { display:flex; flex-wrap:wrap; gap:6px; }
-.skill-tag { padding:3px 10px; border-radius:2px; font-size:10.5px; background:rgba(255,255,255,0.04); border:1px solid var(--border); color:var(--muted); letter-spacing:0.5px; }
-
-.exp-list { display:flex; flex-direction:column; }
-.exp-item { display:grid; grid-template-columns:160px 1fr; gap:0 32px; padding:28px 0; border-bottom:1px solid var(--border); }
-.exp-item:last-child { border-bottom:none; }
-.exp-date { font-size:11px; color:var(--muted); letter-spacing:1px; padding-top:3px; line-height:1.6; }
-.exp-date strong { display:block; color:var(--cyan); font-size:12px; margin-bottom:4px; }
-.exp-title { font-size:15px; font-weight:700; color:#fff; margin-bottom:4px; }
-.exp-org { font-size:12px; color:var(--kali-blue2); margin-bottom:14px; letter-spacing:0.5px; }
-.exp-bullets { list-style:none; display:flex; flex-direction:column; gap:6px; }
-.exp-bullets li { font-size:12.5px; color:#7c7f93; display:flex; gap:10px; line-height:1.6; }
-.exp-bullets li::before { content:'→'; color:var(--green2); flex-shrink:0; }
-
-/* CERTS */
-.certs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
-.cert-card { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:20px; display:flex; align-items:flex-start; gap:16px; transition:border-color 0.2s,box-shadow 0.2s; position:relative; }
-.cert-card.clickable { cursor:none; border-color:rgba(38,119,204,0.35); }
-.cert-card.clickable::after { content:'↗ VIEW'; position:absolute; top:12px; right:14px; font-size:9px; letter-spacing:1.5px; color:var(--cyan); opacity:0; transition:opacity 0.2s; }
-.cert-card.clickable:hover { border-color:var(--cyan); box-shadow:0 0 24px rgba(0,210,255,0.1); }
-.cert-card.clickable:hover::after { opacity:1; }
-.cert-card.no-link { opacity:0.65; }
-.cert-icon { width:40px; height:40px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; background:rgba(38,119,204,0.12); border:1px solid rgba(38,119,204,0.2); }
-.cert-name { font-size:13px; font-weight:700; color:#dde3f0; margin-bottom:4px; line-height:1.4; }
-.cert-issuer { font-size:11px; color:var(--muted); letter-spacing:0.5px; }
-.cert-status { display:inline-block; margin-top:8px; padding:2px 8px; border-radius:2px; font-size:10px; letter-spacing:1px; }
-.cert-done { background:rgba(57,211,83,0.1); color:var(--green); border:1px solid rgba(57,211,83,0.25); }
-.cert-progress { background:rgba(255,165,2,0.1); color:var(--yellow); border:1px solid rgba(255,165,2,0.25); }
-.cert-planned { background:rgba(168,85,247,0.1); color:var(--purple); border:1px solid rgba(168,85,247,0.25); }
-
-/* MODAL */
-.cert-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(8px); }
-.cert-modal-overlay.active { display:flex; }
-.cert-modal { background:var(--surface); border:1px solid var(--cyan); border-radius:10px; overflow:hidden; max-width:92vw; max-height:92vh; box-shadow:0 0 80px rgba(0,210,255,0.2); display:flex; flex-direction:column; }
-.cert-modal-bar { background:#1a1d27; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); flex-shrink:0; }
-.cert-modal-title { font-size:12px; color:var(--cyan); letter-spacing:1.5px; }
-.cert-modal-actions { display:flex; gap:10px; align-items:center; }
-.cert-modal-download { background:none; border:1px solid var(--green2); color:var(--green2); font-family:'JetBrains Mono',monospace; font-size:11px; padding:5px 14px; border-radius:3px; cursor:none; transition:all 0.2s; letter-spacing:1px; text-decoration:none; display:inline-block; }
-.cert-modal-download:hover { background:rgba(0,255,65,0.1); }
-.cert-modal-close { background:none; border:1px solid var(--border); color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:11px; padding:5px 14px; border-radius:3px; cursor:none; transition:border-color 0.2s,color 0.2s; letter-spacing:1px; }
-.cert-modal-close:hover { border-color:var(--red); color:var(--red); }
-.cert-modal-body { overflow:auto; display:flex; align-items:center; justify-content:center; background:#080a0e; }
-.cert-modal-img { max-width:100%; max-height:calc(92vh - 60px); display:block; object-fit:contain; }
-.cert-modal-pdf { width:80vw; height:calc(92vh - 60px); border:none; display:block; }
-
-.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:60px; }
-.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:24px; text-align:center; }
-.stat-num { font-family:'Orbitron',monospace; font-size:32px; font-weight:900; color:var(--green2); text-shadow:0 0 20px rgba(0,255,65,0.3); margin-bottom:6px; }
-.stat-label { font-size:10px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; }
-
-.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; }
-.contact-info { display:flex; flex-direction:column; gap:14px; }
-.contact-link { display:flex; align-items:center; gap:14px; padding:14px 18px; background:var(--surface); border:1px solid var(--border); border-radius:6px; text-decoration:none; color:var(--text); font-size:13px; transition:border-color 0.2s,color 0.2s; }
-.contact-link:hover { border-color:var(--green2); color:var(--green2); }
-.contact-link .cl-icon { font-size:18px; width:30px; text-align:center; }
-.contact-link .cl-label { color:var(--muted); font-size:10px; letter-spacing:1px; display:block; margin-bottom:2px; }
-.contact-link .cl-val { font-size:13px; }
-.mini-terminal { background:#0a0c10; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
-.mini-terminal .terminal-body { min-height:200px; }
-footer { border-top:1px solid var(--border); padding:24px 40px; text-align:center; font-size:11px; color:var(--muted); letter-spacing:1px; position:relative; z-index:1; }
-footer span { color:var(--green2); }
-
-/* ── PROJECTS SECTION ─────────────────────────────────── */
-.projects-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; }
-
-.proj-card {
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:24px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  transition:border-color 0.25s, transform 0.25s, box-shadow 0.25s;
-  position:relative;
-  overflow:hidden;
-}
-.proj-card::before {
-  content:'';
-  position:absolute;
-  top:0; left:0;
-  width:100%; height:2px;
-  background:var(--border);
-  transition:background 0.25s;
-}
-.proj-card:hover { border-color:rgba(0,255,65,0.25); transform:translateY(-3px); box-shadow:0 8px 32px rgba(0,0,0,0.4); }
-.proj-card:hover::before { background:var(--green2); }
-.proj-card.featured { border-color:rgba(0,255,65,0.18); }
-.proj-card.featured::before { background:linear-gradient(90deg, var(--green2), var(--cyan)); }
-
-.proj-card-top { display:flex; justify-content:space-between; align-items:center; min-height:20px; }
-.proj-badge { font-family:'Orbitron',monospace; font-size:8px; color:#000; background:var(--green2); padding:2px 8px; border-radius:2px; letter-spacing:2px; font-weight:900; }
-.proj-status { font-size:10px; letter-spacing:1px; }
-.proj-status.live   { color:var(--green); }
-.proj-status.wip    { color:var(--yellow); }
-.proj-status.done   { color:var(--cyan); }
-
-.proj-icon { font-size:28px; line-height:1; }
-
-.proj-title { font-family:'Orbitron',monospace; font-size:13px; color:#e2e8f0; letter-spacing:1.5px; line-height:1.4; }
-
-.proj-desc { font-size:12px; color:var(--muted); line-height:1.75; flex:1; }
-
-.proj-tech { display:flex; flex-wrap:wrap; gap:6px; }
-.proj-tech span { font-size:10px; color:var(--cyan); background:rgba(0,210,255,0.06); border:1px solid rgba(0,210,255,0.2); padding:2px 8px; border-radius:2px; letter-spacing:0.5px; }
-
-.proj-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
-.proj-btn { font-family:'JetBrains Mono',monospace; font-size:11px; padding:7px 16px; border-radius:3px; text-decoration:none; letter-spacing:1px; transition:all 0.2s; cursor:none; }
-.proj-btn.primary { background:rgba(0,255,65,0.08); color:var(--green2); border:1px solid rgba(0,255,65,0.35); }
-.proj-btn.primary:hover { background:var(--green2); color:#000; box-shadow:0 0 16px rgba(0,255,65,0.3); }
-.proj-btn.secondary { background:transparent; color:var(--muted); border:1px solid var(--border); }
-.proj-btn.secondary:hover { color:var(--text); border-color:rgba(255,255,255,0.2); }
-/* ── END PROJECTS ─────────────────────────────────────── */
-
-@media (max-width:768px) {
-  nav { padding:0 20px; } .nav-links { display:none; }
-  .hero { flex-direction:column; padding:100px 20px 40px; gap:40px; }
-  .hero-right { flex:0 0 auto; width:100%; justify-content:center; }
-  section { padding:60px 20px; }
-  .exp-item { grid-template-columns:1fr; gap:8px; }
-  .stats-row { grid-template-columns:repeat(2,1fr); }
-  .contact-grid { grid-template-columns:1fr; }
-  hr.sec-divider { margin:0 20px; }
-  .cert-modal-pdf { width:95vw; }
-  .projects-grid { grid-template-columns:1fr; }
-}
-</style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-dot" id="cursorDot"></div>
+  <!-- ═══ CURSOR ═══ -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
 
-<!-- CERT MODAL -->
-<div class="cert-modal-overlay" id="certModal">
-  <div class="cert-modal">
-    <div class="cert-modal-bar">
-      <span class="cert-modal-title" id="certModalTitle">CERTIFICATE</span>
-      <div class="cert-modal-actions">
-        <a class="cert-modal-download" id="certModalDownload" href="#" target="_blank">⬇ DOWNLOAD</a>
-        <button class="cert-modal-close" onclick="closeCertModal()">✕ CLOSE</button>
-      </div>
+  <!-- ═══ NOISE OVERLAY ═══ -->
+  <div class="noise"></div>
+
+  <!-- ═══ NAV ═══ -->
+  <nav class="nav" id="nav">
+    <a href="#hero" class="nav-logo">KH<span class="accent">.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about" class="nav-link">About</a></li>
+      <li><a href="#skills" class="nav-link">Skills</a></li>
+      <li><a href="#projects" class="nav-link">Projects</a></li>
+      <li><a href="#experience" class="nav-link">Experience</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon sun">☀</span>
+        <span class="theme-icon moon">◑</span>
+      </button>
+      <a href="Khaled_Hamdy_CV.pdf" download class="btn-cv">
+        <span>Download CV</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      </a>
     </div>
-    <div class="cert-modal-body" id="certModalBody"></div>
-  </div>
-</div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">KH@R3DTEAM:~$</div>
-  <ul class="nav-links">
-    <li><a href="#skills"><span>01</span>skills</a></li>
-    <li><a href="#experience"><span>02</span>experience</a></li>
-    <li><a href="#certs"><span>03</span>certs</a></li>
-    <li><a href="#projects"><span>04</span>projects</a></li>
-    <li><a href="#contact"><span>05</span>contact</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-left">
-    <div class="hero-tag">// Red Team | Penetration Tester | Offensive Security</div>
-    <h1 class="hero-name">KHALED<br><span class="accent">HAMDY</span></h1>
-    <p class="hero-role">Junior <span class="hl">Red Team Operator</span> · Mansoura University CCE '27<br>Bug Bounty · CTF · Ethical Hacking · Egypt</p>
-    <div class="hero-badges">
-      <span class="badge badge-green">✓ Kali Linux</span>
-      <span class="badge badge-blue">✓ Metasploit</span>
-      <span class="badge badge-red">✓ Burp Suite</span>
-      <span class="badge badge-purple">✓ Active Directory</span>
-      <span class="badge badge-yellow">✓ Python</span>
-      <span class="badge badge-blue">✓ Wireshark</span>
-    </div>
-    <div class="hero-cta">
-      <a href="Khaled_Hamdy_CV.pdf" class="btn btn-primary" target="_blank">⬇ Download CV</a>
-      <a href="#contact" class="btn btn-ghost">→ Get In Touch</a>
-    </div>
-  </div>
-  <div class="hero-right">
-    <div class="terminal" style="width:340px">
-      <div class="terminal-bar">
-        <div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div>
-        <span class="terminal-title">kali@khaled — bash — 80×24</span>
-      </div>
-      <div class="terminal-body" id="typedTerminal"></div>
-    </div>
-  </div>
-</div>
-
-<hr class="sec-divider">
-
-<!-- STATS -->
-<section>
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-num">3.4</div><div class="stat-label">GPA / 4.0</div></div>
-    <div class="stat-card"><div class="stat-num">180+</div><div class="stat-label">Lab Hours</div></div>
-    <div class="stat-card"><div class="stat-num">2+</div><div class="stat-label">Years Active</div></div>
-    <div class="stat-card"><div class="stat-num">10+</div><div class="stat-label">Tools Mastered</div></div>
+  <!-- ═══ MOBILE MENU ═══ -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#about" class="mob-link">About</a></li>
+      <li><a href="#skills" class="mob-link">Skills</a></li>
+      <li><a href="#projects" class="mob-link">Projects</a></li>
+      <li><a href="#experience" class="mob-link">Experience</a></li>
+      <li><a href="#contact" class="mob-link">Contact</a></li>
+    </ul>
+    <a href="Khaled_Hamdy_CV.pdf" download class="btn-cv mobile-cv">Download CV</a>
   </div>
 
-  <div id="skills">
-    <div class="section-label">Technical Arsenal</div>
-    <div class="section-title">Skills & Tools</div>
-    <div class="skills-grid">
-      <div class="skill-card" style="--accent-color:#ff4757">
-        <div class="skill-card-header"><div class="skill-icon" style="background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.2)">⚔️</div><div class="skill-card-title">Offensive Security</div></div>
-        <div class="skill-tags"><span class="skill-tag">Reconnaissance</span><span class="skill-tag">Scanning</span><span class="skill-tag">Enumeration</span><span class="skill-tag">Exploitation</span><span class="skill-tag">Privilege Escalation</span><span class="skill-tag">Post-Exploitation</span><span class="skill-tag">Lateral Movement</span></div>
-      </div>
-      <div class="skill-card" style="--accent-color:#39d353">
-        <div class="skill-card-header"><div class="skill-icon" style="background:rgba(57,211,83,0.1);border:1px solid rgba(57,211,83,0.2)">🐉</div><div class="skill-card-title">Penetration Testing Tools</div></div>
-        <div class="skill-tags"><span class="skill-tag">Kali Linux</span><span class="skill-tag">Metasploit</span><span class="skill-tag">Nmap</span><span class="skill-tag">Burp Suite</span><span class="skill-tag">Wireshark</span><span class="skill-tag">Nikto</span><span class="skill-tag">Gobuster</span></div>
-      </div>
-      <div class="skill-card" style="--accent-color:#a855f7">
-        <div class="skill-card-header"><div class="skill-icon" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2)">🏰</div><div class="skill-card-title">Active Directory Attacks</div></div>
-        <div class="skill-tags"><span class="skill-tag">Kerberoasting</span><span class="skill-tag">Pass-the-Hash</span><span class="skill-tag">BloodHound</span><span class="skill-tag">Mimikatz</span><span class="skill-tag">DCSync</span><span class="skill-tag">AS-REP Roasting</span></div>
-      </div>
-      <div class="skill-card" style="--accent-color:#00d2ff">
-        <div class="skill-card-header"><div class="skill-icon" style="background:rgba(0,210,255,0.1);border:1px solid rgba(0,210,255,0.2)">🌐</div><div class="skill-card-title">Web Application Testing</div></div>
-        <div class="skill-tags"><span class="skill-tag">SQLi</span><span class="skill-tag">XSS</span><span class="skill-tag">IDOR</span><span class="skill-tag">SSRF</span><span class="skill-tag">Auth Bypass</span><span class="skill-tag">OWASP Top 10</span><span class="skill-tag">API Testing</span></div>
-      </div>
-      <div class="skill-card" style="--accent-color:#2677cc">
-        <div class="skill-card-header"><div class="skill-icon" style="background:rgba(38,119,204,0.1);border:1px solid rgba(38,119,204,0.2)">🔗</div><div class="skill-card-title">Networking</div></div>
-        <div class="skill-tags"><span class="skill-tag">TCP/IP</span><span class="skill-tag">VLANs</span><span class="skill-tag">VPN</span><span class="skill-tag">Firewalls</span><span class="skill-tag">ACLs</span><span class="skill-tag">Routing</span><span class="skill-tag">OSPF</span><span class="skill-tag">Subnetting</span></div>
-      </div>
-      <div class="skill-card" style="--accent-color:#ffa502">
-        <div class="skill-card-header"><div class="skill-icon" style="background:rgba(255,165,2,0.1);border:1px solid rgba(255,165,2,0.2)">🐍</div><div class="skill-card-title">Programming & Scripting</div></div>
-        <div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">Bash Scripting</span><span class="skill-tag">Port Scanners</span><span class="skill-tag">Exploit Scripts</span><span class="skill-tag">Automation Tools</span></div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
 
-<hr class="sec-divider">
-
-<!-- EXPERIENCE -->
-<section id="experience">
-  <div class="section-label">Engagements</div>
-  <div class="section-title">Experience & Training</div>
-  <div class="exp-list">
-    <div class="exp-item">
-      <div class="exp-date"><strong>2023 – PRESENT</strong>Remote</div>
-      <div class="exp-content">
-        <div class="exp-title">Red Team Operator — Personal Lab & Projects</div>
-        <div class="exp-org">Independent Security Research</div>
-        <ul class="exp-bullets">
-          <li>Conducted full-cycle penetration tests in home lab: recon → exploitation → report.</li>
-          <li>Built custom Python tools for port scanning, banner grabbing, and brute-forcing.</li>
-          <li>Practiced advanced techniques: privilege escalation, lateral movement, post-exploitation.</li>
-          <li>Active on TryHackMe — completed paths covering web exploitation, network attacks, and AD attacks.</li>
-          <li>Participated in CTF competitions and published writeups documenting methodologies.</li>
-        </ul>
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <span class="badge-dot"></span>
+        <span>Available for Opportunities</span>
       </div>
-    </div>
-    <div class="exp-item">
-      <div class="exp-date"><strong>2022 – PRESENT</strong>Remote</div>
-      <div class="exp-content">
-        <div class="exp-title">Bug Bounty Researcher</div>
-        <div class="exp-org">HackerOne · Bugcrowd</div>
-        <ul class="exp-bullets">
-          <li>Discovered and responsibly disclosed critical vulnerabilities including XSS, SQLi, IDOR, and auth bypasses.</li>
-          <li>Received acknowledgments and bounties from major organizations.</li>
-          <li>Focused on web application security, REST API testing, and mobile app attack surfaces.</li>
-        </ul>
+
+      <h1 class="hero-name reveal">
+        <span class="hero-name-first">KHALED</span>
+        <br />
+        <span class="hero-name-last">HAMDY</span>
+      </h1>
+
+      <div class="hero-title reveal">
+        <span class="title-prefix">——</span>
+        <span class="title-text" id="typedTitle"></span>
+        <span class="title-cursor">|</span>
       </div>
-    </div>
-    <div class="exp-item">
-      <div class="exp-date"><strong>180+ Hours</strong>Jul – Oct 2025</div>
-      <div class="exp-content">
-        <div class="exp-title">Network Engineering Trainee — CCNA</div>
-        <div class="exp-org">OneLab Training Center · Mansoura, Egypt</div>
-        <ul class="exp-bullets">
-          <li>Completed 180+ hours of hands-on enterprise networking with Cisco technologies.</li>
-          <li>Configured VLANs, OSPF routing, ACLs, VPNs, and firewall rules in GNS3 lab environments.</li>
-          <li>Earned CCNA training certification upon completion.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
 
-<hr class="sec-divider">
-
-<!-- CERTS -->
-<section id="certs">
-  <div class="section-label">Credentials</div>
-  <div class="section-title">Certifications</div>
-  <div class="certs-grid">
-
-    <div class="cert-card clickable"
-         onclick="openCert('img','Cisco%20Certified%20Network%20Associate.jpg','CCNA — Cisco Certified Network Associate')">
-      <div class="cert-icon" style="background:rgba(0,210,255,0.12);border:1px solid rgba(0,210,255,0.25)">🔗</div>
-      <div>
-        <div class="cert-name">CCNA — Cisco Certified Network Associate</div>
-        <div class="cert-issuer">OneLab Training Center · 180 Hours · Jul–Oct 2025</div>
-        <span class="cert-status cert-done">✓ COMPLETED</span>
-      </div>
-    </div>
-
-    <div class="cert-card clickable"
-         onclick="openCert('pdf','CertificateOfCompletion_Career%20Essentials%20in%20Cybersecurity%20by%20Microsoft%20and%20LinkedIn.pdf','Career Essentials in Cybersecurity — Microsoft & LinkedIn')">
-      <div class="cert-icon">🏅</div>
-      <div>
-        <div class="cert-name">Career Essentials in Cybersecurity</div>
-        <div class="cert-issuer">Microsoft & LinkedIn Learning</div>
-        <span class="cert-status cert-done">✓ COMPLETED</span>
-      </div>
-    </div>
-
-    <div class="cert-card clickable"
-         onclick="openCert('pdf','Introduction_to_Cybersecurity_certificate_khalidhamdy37-gmail-com_0062e221-8873-447d-8096-1c104d353fc6.pdf','Introduction to Cybersecurity — Cisco Networking Academy')">
-      <div class="cert-icon">🛡️</div>
-      <div>
-        <div class="cert-name">Introduction to Cybersecurity</div>
-        <div class="cert-issuer">Cisco Networking Academy</div>
-        <span class="cert-status cert-done">✓ COMPLETED</span>
-      </div>
-    </div>
-
-    <div class="cert-card no-link">
-      <div class="cert-icon">⚡</div>
-      <div>
-        <div class="cert-name">eJPT — eLearnSecurity Junior PT</div>
-        <div class="cert-issuer">INE Security</div>
-        <span class="cert-status cert-progress">⟳ IN PROGRESS</span>
-      </div>
-    </div>
-
-    <div class="cert-card no-link">
-      <div class="cert-icon">🎯</div>
-      <div>
-        <div class="cert-name">CEH — Certified Ethical Hacker</div>
-        <div class="cert-issuer">EC-Council</div>
-        <span class="cert-status cert-planned">◎ PLANNED 2025</span>
-      </div>
-    </div>
-
-    <div class="cert-card no-link">
-      <div class="cert-icon">💀</div>
-      <div>
-        <div class="cert-name">OSCP — Offensive Security Certified Professional</div>
-        <div class="cert-issuer">Offensive Security</div>
-        <span class="cert-status cert-planned">◎ PLANNED 2026</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<hr class="sec-divider">
-
-<!-- ══════════════════════════════════════════════════════
-     PROJECTS SECTION
-     ══════════════════════════════════════════════════════ -->
-<section id="projects">
-  <div class="section-label">Built & Deployed</div>
-  <div class="section-title">Projects</div>
-  <div class="projects-grid">
-
-    <!-- Malware Sandbox — FEATURED, LIVE -->
-    <div class="proj-card featured">
-      <div class="proj-card-top">
-        <div class="proj-badge">FEATURED</div>
-        <div class="proj-status live">● LIVE</div>
-      </div>
-      <div class="proj-icon">⚠</div>
-      <div class="proj-title">Malware Sandbox Simulator</div>
-      <p class="proj-desc">
-        Browser-based malware analysis platform simulating real sandbox behavior —
-        static string extraction, dynamic VM detonation, C2 network traffic detection,
-        behavior classification (Ransomware / RAT), and full threat reporting.
+      <p class="hero-desc reveal">
+        Offensive Security Engineer & Penetration Tester operating out of Egypt.
+        I engineer attacks before attackers do — exposing vulnerabilities across
+        networks, web applications, and Active Directory environments.
       </p>
-      <div class="proj-tech">
-        <span>React</span>
-        <span>Malware Analysis</span>
-        <span>Dynamic Analysis</span>
-        <span>C2 Detection</span>
-        <span>Threat Intel</span>
-      </div>
-      <div class="proj-actions">
-        <a href="https://malware-sandbox-chi.vercel.app/" target="_blank" class="proj-btn primary">[ LAUNCH SANDBOX ]</a>
-        <a href="https://github.com/khaledhamdy404" target="_blank" class="proj-btn secondary">[ GITHUB ]</a>
-      </div>
-    </div>
 
-    <!-- Python Recon Toolkit -->
-    <div class="proj-card">
-      <div class="proj-card-top">
-        <div class="proj-status wip">⟳ IN PROGRESS</div>
+      <div class="hero-tags reveal">
+        <span class="tag">Red Team</span>
+        <span class="tag">Bug Bounty</span>
+        <span class="tag">CCNA</span>
+        <span class="tag">CTF</span>
+        <span class="tag">Python</span>
       </div>
-      <div class="proj-icon">🔍</div>
-      <div class="proj-title">Python Recon Toolkit</div>
-      <p class="proj-desc">
-        Custom Python toolset for network reconnaissance — port scanning,
-        banner grabbing, service enumeration, and automated report generation.
-      </p>
-      <div class="proj-tech">
-        <span>Python</span>
-        <span>Sockets</span>
-        <span>Nmap</span>
-        <span>Recon</span>
-      </div>
-      <div class="proj-actions">
-        <a href="https://github.com/khaledhamdy404" target="_blank" class="proj-btn secondary">[ GITHUB ]</a>
+
+      <div class="hero-ctas reveal">
+        <a href="#projects" class="btn-primary">
+          <span>View Projects</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#contact" class="btn-ghost">Get In Touch</a>
       </div>
     </div>
 
-    <!-- CTF Writeups -->
-    <div class="proj-card">
-      <div class="proj-card-top">
-        <div class="proj-status live">● ACTIVE</div>
+    <div class="hero-stats reveal">
+      <div class="stat">
+        <span class="stat-num" data-target="180">0</span><span class="stat-suffix">+</span>
+        <span class="stat-label">Lab Hours</span>
       </div>
-      <div class="proj-icon">🏴</div>
-      <div class="proj-title">CTF Writeups</div>
-      <p class="proj-desc">
-        Documented solutions for TryHackMe and HackTheBox challenges —
-        web exploitation, privilege escalation, Active Directory attacks,
-        and network forensics with full methodology breakdowns.
-      </p>
-      <div class="proj-tech">
-        <span>TryHackMe</span>
-        <span>HackTheBox</span>
-        <span>Web Exploitation</span>
-        <span>AD Attacks</span>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num" data-target="10">0</span><span class="stat-suffix">+</span>
+        <span class="stat-label">Tools Mastered</span>
       </div>
-      <div class="proj-actions">
-        <a href="https://github.com/khaledhamdy404" target="_blank" class="proj-btn secondary">[ VIEW WRITEUPS ]</a>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num" data-target="3">0</span><span class="stat-suffix">+</span>
+        <span class="stat-label">Projects Deployed</span>
       </div>
-    </div>
-
-  </div>
-</section>
-
-<hr class="sec-divider">
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-label">Reach Out</div>
-  <div class="section-title">Contact</div>
-  <div class="contact-grid">
-    <div class="contact-info">
-      <a href="mailto:khalidhamdy37@gmail.com" class="contact-link">
-        <span class="cl-icon">✉</span>
-        <div><span class="cl-label">EMAIL</span><span class="cl-val">khalidhamdy37@gmail.com</span></div>
-      </a>
-      <a href="https://github.com/khaledhamdy404" target="_blank" class="contact-link">
-        <span class="cl-icon">⌥</span>
-        <div><span class="cl-label">GITHUB</span><span class="cl-val">github.com/khaledhamdy404</span></div>
-      </a>
-      <a href="https://linkedin.com/in/khalidhamdy" target="_blank" class="contact-link">
-        <span class="cl-icon">in</span>
-        <div><span class="cl-label">LINKEDIN</span><span class="cl-val">linkedin.com/in/khalidhamdy</span></div>
-      </a>
-      <a href="https://www.hackerone.com" target="_blank" class="contact-link">
-        <span class="cl-icon">🏴</span>
-        <div><span class="cl-label">BUG BOUNTY</span><span class="cl-val">HackerOne · Bugcrowd</span></div>
-      </a>
-    </div>
-    <div class="mini-terminal">
-      <div class="terminal-bar">
-        <div class="t-dot t-red"></div><div class="t-dot t-yellow"></div><div class="t-dot t-green"></div>
-        <span class="terminal-title">whois khaled_hamdy</span>
-      </div>
-      <div class="terminal-body">
-        <div class="t-line"><span class="t-out">name</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Khaled Hamdy Mahmoud</span></div>
-        <div class="t-line"><span class="t-out">role</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Junior Red Team Operator</span></div>
-        <div class="t-line"><span class="t-out">location</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Egypt 🇪🇬</span></div>
-        <div class="t-line"><span class="t-out">university</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Mansoura · CCE · 2027</span></div>
-        <div class="t-line"><span class="t-out">status</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-green-t">open_to_work = true</span></div>
-        <div class="t-line"><span class="t-out">focus</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">Offensive Security</span></div>
-        <div class="t-line"><span class="t-out">platforms</span><span style="color:var(--muted)">:</span>&nbsp;<span class="t-val">TryHackMe · HTB · H1</span></div>
-        <br>
-        <div class="t-line"><span class="t-prompt">$</span>&nbsp;<span class="t-cmd">cat motto.txt</span></div>
-        <div class="t-line"><span style="color:#7c7f93;font-style:italic">"Think like an attacker. Build like a defender."</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num" data-target="2">0</span><span class="stat-suffix">+</span>
+        <span class="stat-label">Years Active</span>
       </div>
     </div>
-  </div>
-</section>
 
-<footer>
-  <span>KH@R3DTEAM</span> · Khaled Hamdy · Egypt · 2026 · All rights reserved
-</footer>
+    <a href="#about" class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </a>
+  </section>
 
-<script>
-// CURSOR
-const cursor = document.getElementById('cursor');
-const dot = document.getElementById('cursorDot');
-document.addEventListener('mousemove', e => {
-  dot.style.left = e.clientX + 'px';
-  dot.style.top = e.clientY + 'px';
-  cursor.style.left = (e.clientX - 10) + 'px';
-  cursor.style.top = (e.clientY - 10) + 'px';
-});
+  <!-- ═══ ABOUT ═══ -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">01 / About</span>
+        <h2 class="section-title">Engineering Security<br /><em>From the Attacker's View</em></h2>
+      </div>
 
-// CERT MODAL
-function openCert(type, file, title) {
-  document.getElementById('certModalTitle').textContent = title;
-  document.getElementById('certModalDownload').href = file;
-  const body = document.getElementById('certModalBody');
-  body.innerHTML = '';
-  if (type === 'img') {
-    const img = document.createElement('img');
-    img.className = 'cert-modal-img';
-    img.src = file;
-    img.alt = title;
-    body.appendChild(img);
-  } else {
-    const iframe = document.createElement('iframe');
-    iframe.className = 'cert-modal-pdf';
-    iframe.src = file;
-    iframe.title = title;
-    body.appendChild(iframe);
-  }
-  document.getElementById('certModal').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p class="about-lead">
+            I'm a Computer & Communications Engineering student at Mansoura University (Class of 2027),
+            specializing in offensive security and red team operations.
+          </p>
+          <p>
+            My approach to security is methodical and adversarial — I replicate real-world attack chains 
+            to expose vulnerabilities before malicious actors can exploit them. From network enumeration 
+            to Active Directory exploitation, I operate across the full kill chain.
+          </p>
+          <p>
+            Beyond the offensive side, I architect backend systems and build custom tooling in Python —
+            because the best security engineers understand what they're breaking.
+          </p>
+          <div class="about-meta">
+            <div class="meta-item">
+              <span class="meta-label">Location</span>
+              <span class="meta-val">Mansoura, Egypt 🇪🇬</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">University</span>
+              <span class="meta-val">Mansoura University · CCE · 2027</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Focus</span>
+              <span class="meta-val">Offensive Security · Red Team</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Status</span>
+              <span class="meta-val meta-open"><span class="pulse"></span>Open to Work</span>
+            </div>
+          </div>
+        </div>
 
-function closeCertModal() {
-  document.getElementById('certModal').classList.remove('active');
-  document.getElementById('certModalBody').innerHTML = '';
-  document.body.style.overflow = '';
-}
+        <div class="about-card reveal">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+              <span class="terminal-title">whois khaled_hamdy</span>
+            </div>
+            <div class="terminal-body">
+              <div class="t-line"><span class="t-prompt">$</span> <span class="t-cmd">cat identity.json</span></div>
+              <div class="t-block">
+                <div class="t-line"><span class="t-key">"name"</span><span class="t-colon">:</span> <span class="t-str">"Khaled Hamdy Mahmoud"</span><span class="t-comma">,</span></div>
+                <div class="t-line"><span class="t-key">"role"</span><span class="t-colon">:</span> <span class="t-str">"Offensive Security Engineer"</span><span class="t-comma">,</span></div>
+                <div class="t-line"><span class="t-key">"gpa"</span><span class="t-colon">:</span> <span class="t-num">3.4</span><span class="t-comma">,</span></div>
+                <div class="t-line"><span class="t-key">"platforms"</span><span class="t-colon">:</span> <span class="t-arr">["TryHackMe", "HTB", "H1"]</span><span class="t-comma">,</span></div>
+                <div class="t-line"><span class="t-key">"motto"</span><span class="t-colon">:</span> <span class="t-str">"Think like an attacker."</span></div>
+              </div>
+              <div class="t-line t-cursor-line"><span class="t-prompt">$</span> <span class="t-blink">█</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-document.getElementById('certModal').addEventListener('click', function(e) {
-  if (e.target === this) closeCertModal();
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCertModal(); });
+  <!-- ═══ SKILLS ═══ -->
+  <section class="section skills" id="skills">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">02 / Skills</span>
+        <h2 class="section-title">Technical Arsenal</h2>
+      </div>
 
-// TERMINAL TYPEWRITER
-const lines = [
-  { type:'prompt', text:'whoami' },
-  { type:'output', text:'<span class="t-val">khaled_hamdy</span> <span class="t-out">// red_team_operator</span>' },
-  { type:'prompt', text:'cat skills.txt' },
-  { type:'output', text:'<span class="t-green-t">pentesting</span> | <span class="t-red-t">exploitation</span> | <span class="t-val">AD attacks</span>' },
-  { type:'prompt', text:'nmap -sV target.corp' },
-  { type:'output', text:'<span class="t-out">80/tcp</span>  <span class="t-green-t">open</span>  <span class="t-val">http</span>' },
-  { type:'output', text:'<span class="t-out">443/tcp</span> <span class="t-green-t">open</span>  <span class="t-val">https</span>' },
-  { type:'output', text:'<span class="t-out">445/tcp</span> <span class="t-green-t">open</span>  <span class="t-val">smb</span> <span class="t-red-t">← interesting</span>' },
-  { type:'prompt', text:'python3 exploit.py --target 10.10.10.1' },
-  { type:'output', text:'<span class="t-green-t">[+] Shell obtained. Welcome, root.</span>' },
-  { type:'cursor' },
-];
-const tb = document.getElementById('typedTerminal');
-let li = 0;
-function makePromptLine() {
-  const div = document.createElement('div');
-  div.className = 't-line';
-  div.innerHTML = `<span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-cmd" id="typeSpan"></span><span class="t-blink" id="typeBlink"></span>`;
-  return div;
-}
-function typeLine(sp, bl, text, cb) {
-  let i = 0;
-  const iv = setInterval(() => {
-    sp.textContent += text[i++];
-    if (i >= text.length) { clearInterval(iv); if (cb) cb(); }
-  }, 40);
-}
-function renderNext() {
-  if (li >= lines.length) return;
-  const line = lines[li++];
-  if (line.type === 'prompt') {
-    const div = makePromptLine();
-    tb.appendChild(div);
-    typeLine(div.querySelector('#typeSpan'), div.querySelector('#typeBlink'), line.text, () => {
-      div.querySelector('#typeBlink').remove();
-      setTimeout(renderNext, 300);
-    });
-  } else if (line.type === 'output') {
-    const div = document.createElement('div');
-    div.className = 't-line';
-    div.innerHTML = `<span style="padding-left:20px">${line.text}</span>`;
-    tb.appendChild(div);
-    setTimeout(renderNext, 80);
-  } else {
-    const div = document.createElement('div');
-    div.className = 't-line';
-    div.innerHTML = `<span class="t-green-t">┌──(</span><span class="t-user">khaled</span><span class="t-at">㉿</span><span class="t-host">kali</span><span class="t-green-t">)-[</span><span class="t-path">~</span><span class="t-green-t">]</span><br><span class="t-green-t">└─</span><span class="t-prompt">$</span>&nbsp;<span class="t-blink"></span>`;
-    tb.appendChild(div);
-  }
-}
-setTimeout(renderNext, 800);
-</script>
+      <div class="skills-grid">
+
+        <div class="skill-card reveal">
+          <div class="skill-card-icon">⚔</div>
+          <h3 class="skill-card-title">Offensive Security</h3>
+          <ul class="skill-list">
+            <li>Reconnaissance & OSINT</li>
+            <li>Port Scanning & Enumeration</li>
+            <li>Exploitation & Privilege Escalation</li>
+            <li>Post-Exploitation & Lateral Movement</li>
+            <li>Social Engineering Frameworks</li>
+          </ul>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-icon">🕸</div>
+          <h3 class="skill-card-title">Web App Testing</h3>
+          <ul class="skill-list">
+            <li>SQL Injection (Manual + SQLMap)</li>
+            <li>XSS / CSRF / IDOR / SSRF</li>
+            <li>Authentication Bypass</li>
+            <li>OWASP Top 10 Coverage</li>
+            <li>REST API Security Testing</li>
+          </ul>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-icon">🏰</div>
+          <h3 class="skill-card-title">Active Directory</h3>
+          <ul class="skill-list">
+            <li>Kerberoasting & AS-REP Roasting</li>
+            <li>Pass-the-Hash / Pass-the-Ticket</li>
+            <li>BloodHound Graph Analysis</li>
+            <li>DCSync & Mimikatz</li>
+            <li>Domain Privilege Escalation</li>
+          </ul>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-icon">🔗</div>
+          <h3 class="skill-card-title">Networking</h3>
+          <ul class="skill-list">
+            <li>TCP/IP — Full Stack</li>
+            <li>VLANs, OSPF, BGP, ACLs</li>
+            <li>VPNs & Firewall Configuration</li>
+            <li>GNS3 Lab Environments</li>
+            <li>Cisco Enterprise Technologies</li>
+          </ul>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-icon">🐍</div>
+          <h3 class="skill-card-title">Programming</h3>
+          <ul class="skill-list">
+            <li>Python — Security Tooling</li>
+            <li>Go — Distributed Systems</li>
+            <li>Bash Scripting & Automation</li>
+            <li>FastAPI, Streamlit, REST APIs</li>
+            <li>Claude API Integration</li>
+          </ul>
+        </div>
+
+        <div class="skill-card reveal">
+          <div class="skill-card-icon">🛠</div>
+          <h3 class="skill-card-title">Tools & Platforms</h3>
+          <ul class="skill-list">
+            <li>Kali Linux · Metasploit · Nmap</li>
+            <li>Burp Suite · Wireshark · Nikto</li>
+            <li>BloodHound · Impacket · Mimikatz</li>
+            <li>TryHackMe · HackTheBox</li>
+            <li>GitHub · Docker · Windows Server</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Tool badges -->
+      <div class="tools-belt reveal">
+        <span class="tool-badge">Kali Linux</span>
+        <span class="tool-badge">Metasploit</span>
+        <span class="tool-badge">Burp Suite</span>
+        <span class="tool-badge">Nmap</span>
+        <span class="tool-badge">Wireshark</span>
+        <span class="tool-badge">BloodHound</span>
+        <span class="tool-badge">Mimikatz</span>
+        <span class="tool-badge">Impacket</span>
+        <span class="tool-badge">Python</span>
+        <span class="tool-badge">Go</span>
+        <span class="tool-badge">Bash</span>
+        <span class="tool-badge">GNS3</span>
+        <span class="tool-badge">Docker</span>
+        <span class="tool-badge">SQLMap</span>
+        <span class="tool-badge">Gobuster</span>
+        <span class="tool-badge">Nikto</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PROJECTS ═══ -->
+  <section class="section projects" id="projects">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">03 / Projects</span>
+        <h2 class="section-title">Engineered &amp; Deployed</h2>
+      </div>
+
+      <div class="projects-list">
+
+        <!-- Project 1 -->
+        <article class="project-card featured reveal">
+          <div class="project-meta">
+            <span class="project-num">01</span>
+            <span class="project-status live"><span class="live-dot"></span>Live</span>
+          </div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3 class="project-title">Malware Sandbox Simulator</h3>
+              <div class="project-links">
+                <a href="https://malware-sandbox-chi.vercel.app/" target="_blank" class="project-link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  Demo
+                </a>
+                <a href="https://github.com/khaledhamdy404" target="_blank" class="project-link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.57v-2c-3.34.72-4.04-1.61-4.04-1.61-.54-1.37-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4 11.5 11.5 0 013 .4c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+
+            <p class="project-problem">
+              <strong>Problem:</strong> Security analysts needed a lightweight, browser-accessible environment 
+              to demonstrate malware behavior analysis without deploying heavyweight VM infrastructure.
+            </p>
+
+            <p class="project-solution">
+              <strong>Solution:</strong> Engineered a React-based browser sandbox that simulates real malware 
+              analysis pipelines — static string extraction, dynamic behavioral emulation, C2 traffic pattern 
+              detection, and threat classification (Ransomware / RAT / Spyware). Delivers full threat reports 
+              with MITRE ATT&CK mapping.
+            </p>
+
+            <div class="project-highlights">
+              <div class="highlight">
+                <span class="h-icon">⚡</span>
+                <span>Zero backend — fully client-side analysis engine</span>
+              </div>
+              <div class="highlight">
+                <span class="h-icon">🎯</span>
+                <span>Behavioral classification across 4 malware families</span>
+              </div>
+              <div class="highlight">
+                <span class="h-icon">📊</span>
+                <span>Generates structured threat intelligence reports</span>
+              </div>
+            </div>
+
+            <div class="project-tags">
+              <span>React</span><span>JavaScript</span><span>Malware Analysis</span>
+              <span>C2 Detection</span><span>Threat Intel</span><span>Vercel</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="project-card reveal">
+          <div class="project-meta">
+            <span class="project-num">02</span>
+            <span class="project-status wip">In Progress</span>
+          </div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3 class="project-title">CDR Analytics Platform</h3>
+              <div class="project-links">
+                <a href="https://github.com/khaledhamdy404" target="_blank" class="project-link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.57v-2c-3.34.72-4.04-1.61-4.04-1.61-.54-1.37-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4 11.5 11.5 0 013 .4c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+
+            <p class="project-problem">
+              <strong>Problem:</strong> Multi-branch pharmacy operations generated thousands of Call Detail 
+              Records monthly with no centralized analytics or anomaly detection layer.
+            </p>
+
+            <p class="project-solution">
+              <strong>Solution:</strong> Architected a full-stack CDR analytics platform using Python/Streamlit 
+              with AI-powered call pattern analysis via the Claude API. Deployed on Windows Server via NSSM 
+              with automated Task Scheduler pipelines, dark-themed PDF report generation, and multi-branch 
+              comparative dashboards.
+            </p>
+
+            <div class="project-highlights">
+              <div class="highlight">
+                <span class="h-icon">🧠</span>
+                <span>AI-driven anomaly detection using Claude API</span>
+              </div>
+              <div class="highlight">
+                <span class="h-icon">🏗</span>
+                <span>Production deployment on Windows Server + NSSM</span>
+              </div>
+              <div class="highlight">
+                <span class="h-icon">📈</span>
+                <span>Multi-month cross-branch statistical analysis</span>
+              </div>
+            </div>
+
+            <div class="project-tags">
+              <span>Python</span><span>Streamlit</span><span>Claude API</span>
+              <span>Pandas</span><span>Windows Server</span><span>PDF Reports</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="project-card reveal">
+          <div class="project-meta">
+            <span class="project-num">03</span>
+            <span class="project-status live"><span class="live-dot"></span>Active</span>
+          </div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3 class="project-title">Python Recon Toolkit</h3>
+              <div class="project-links">
+                <a href="https://github.com/khaledhamdy404" target="_blank" class="project-link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.57v-2c-3.34.72-4.04-1.61-4.04-1.61-.54-1.37-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4 11.5 11.5 0 013 .4c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+
+            <p class="project-problem">
+              <strong>Problem:</strong> Standard reconnaissance workflows required juggling multiple 
+              disconnected tools across different terminals — inefficient for time-sensitive engagements.
+            </p>
+
+            <p class="project-solution">
+              <strong>Solution:</strong> Engineered a modular Python reconnaissance suite combining 
+              multi-threaded port scanning, banner grabbing, service enumeration, and automated report 
+              generation into a single CLI interface. Built with raw socket programming for zero external 
+              tool dependency.
+            </p>
+
+            <div class="project-highlights">
+              <div class="highlight">
+                <span class="h-icon">🔍</span>
+                <span>Multi-threaded scanning — 10x faster than sequential</span>
+              </div>
+              <div class="highlight">
+                <span class="h-icon">📋</span>
+                <span>Automated JSON/PDF report output</span>
+              </div>
+              <div class="highlight">
+                <span class="h-icon">🧩</span>
+                <span>Modular — extend with custom enumeration scripts</span>
+              </div>
+            </div>
+
+            <div class="project-tags">
+              <span>Python</span><span>Sockets</span><span>Multithreading</span>
+              <span>Nmap</span><span>OSINT</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 4 -->
+        <article class="project-card reveal">
+          <div class="project-meta">
+            <span class="project-num">04</span>
+            <span class="project-status live"><span class="live-dot"></span>Active</span>
+          </div>
+          <div class="project-content">
+            <div class="project-header">
+              <h3 class="project-title">Uber-Style Ride-Matching Backend</h3>
+              <div class="project-links">
+                <a href="https://github.com/khaledhamdy404" target="_blank" class="project-link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.57v-2c-3.34.72-4.04-1.61-4.04-1.61-.54-1.37-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4 11.5 11.5 0 013 .4c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+
+            <p class="project-problem">
+              <strong>Problem:</strong> Designing a distributed ride-matching system that handles geospatial 
+              driver proximity matching, real-time state management, and high-concurrency request handling.
+            </p>
+
+            <p class="project-solution">
+              <strong>Solution:</strong> Designed and implemented a production-grade ride-matching backend 
+              in Go with geospatial indexing, concurrent driver state management via goroutines, RESTful 
+              API layer, and a full distributed systems architecture targeting interview-grade system design.
+            </p>
+
+            <div class="project-highlights">
+              <div class="highlight">
+                <span class="h-icon">🚀</span>
+                <span>Goroutine-based concurrency for real-time matching</span>
+              </div>
+              <div class="highlight">
+                <span class="h-icon">🗺</span>
+                <span>Geospatial proximity algorithm for driver selection</span>
+              </div>
+              <div class="highlight">
+                <span class="h-icon">📐</span>
+                <span>Designed for FAANG-level system design interviews</span>
+              </div>
+            </div>
+
+            <div class="project-tags">
+              <span>Go</span><span>REST API</span><span>Distributed Systems</span>
+              <span>Geospatial</span><span>Concurrency</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ EXPERIENCE ═══ -->
+  <section class="section experience" id="experience">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">04 / Experience</span>
+        <h2 class="section-title">Background &amp; Training</h2>
+      </div>
+
+      <div class="timeline">
+
+        <div class="timeline-item reveal">
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <div class="tl-header">
+              <div>
+                <h3 class="tl-role">Red Team Operator</h3>
+                <span class="tl-org">Independent Security Research</span>
+              </div>
+              <span class="tl-date">2023 – Present</span>
+            </div>
+            <ul class="tl-list">
+              <li>Executed full-cycle penetration tests across home lab environments: reconnaissance → exploitation → post-exploitation → report</li>
+              <li>Engineered custom Python tooling for port scanning, banner grabbing, and credential brute-forcing</li>
+              <li>Deployed advanced AD attack chains: Kerberoasting, Pass-the-Hash, BloodHound lateral movement mapping</li>
+              <li>Completed 20+ TryHackMe rooms covering web exploitation, network attacks, and Active Directory</li>
+              <li>Participated in CTF competitions with documented writeups and kill-chain breakdowns</li>
+            </ul>
+            <div class="tl-tags">
+              <span>Red Team</span><span>Active Directory</span><span>Python</span><span>CTF</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <div class="tl-header">
+              <div>
+                <h3 class="tl-role">Bug Bounty Researcher</h3>
+                <span class="tl-org">HackerOne · Bugcrowd</span>
+              </div>
+              <span class="tl-date">2022 – Present</span>
+            </div>
+            <ul class="tl-list">
+              <li>Discovered and responsibly disclosed critical vulnerabilities including XSS, SQL injection, IDOR, and authentication bypasses</li>
+              <li>Received official acknowledgments from major organizations following coordinated disclosure</li>
+              <li>Specialized in web application security, REST API attack surfaces, and session management flaws</li>
+            </ul>
+            <div class="tl-tags">
+              <span>Bug Bounty</span><span>Web Security</span><span>OWASP</span><span>API Testing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item reveal">
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <div class="tl-header">
+              <div>
+                <h3 class="tl-role">Network Engineering Trainee — CCNA</h3>
+                <span class="tl-org">OneLab Training Center · Mansoura</span>
+              </div>
+              <span class="tl-date">Jul – Oct 2025</span>
+            </div>
+            <ul class="tl-list">
+              <li>Completed 180+ hours of hands-on enterprise networking with Cisco technologies</li>
+              <li>Configured VLANs, OSPF routing, ACLs, VPNs, and stateful firewall policies in GNS3 environments</li>
+              <li>Earned CCNA training certification upon completion with distinction</li>
+            </ul>
+            <div class="tl-tags">
+              <span>CCNA</span><span>Cisco</span><span>OSPF</span><span>GNS3</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Certifications -->
+      <div class="certs-section reveal">
+        <h3 class="certs-title">Certifications</h3>
+        <div class="certs-grid">
+          <div class="cert-card completed">
+            <span class="cert-badge">✓</span>
+            <div class="cert-info">
+              <span class="cert-name">CCNA — Cisco Certified Network Associate</span>
+              <span class="cert-org">OneLab · 180 Hours · 2025</span>
+            </div>
+          </div>
+          <div class="cert-card completed">
+            <span class="cert-badge">✓</span>
+            <div class="cert-info">
+              <span class="cert-name">Career Essentials in Cybersecurity</span>
+              <span class="cert-org">Microsoft & LinkedIn Learning</span>
+            </div>
+          </div>
+          <div class="cert-card completed">
+            <span class="cert-badge">✓</span>
+            <div class="cert-info">
+              <span class="cert-name">Introduction to Cybersecurity</span>
+              <span class="cert-org">Cisco Networking Academy</span>
+            </div>
+          </div>
+          <div class="cert-card progress">
+            <span class="cert-badge prog">⟳</span>
+            <div class="cert-info">
+              <span class="cert-name">eJPT — eLearnSecurity Junior Penetration Tester</span>
+              <span class="cert-org">INE Security · In Progress</span>
+            </div>
+          </div>
+          <div class="cert-card planned">
+            <span class="cert-badge plan">◎</span>
+            <div class="cert-info">
+              <span class="cert-name">CEH — Certified Ethical Hacker</span>
+              <span class="cert-org">EC-Council · Planned 2025</span>
+            </div>
+          </div>
+          <div class="cert-card planned">
+            <span class="cert-badge plan">◎</span>
+            <div class="cert-info">
+              <span class="cert-name">OSCP — Offensive Security Certified Professional</span>
+              <span class="cert-org">Offensive Security · Planned 2026</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONTACT ═══ -->
+  <section class="section contact" id="contact">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">05 / Contact</span>
+        <h2 class="section-title">Let's Work Together</h2>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-text reveal">
+          <p class="contact-lead">
+            Open to full-time roles, freelance engagements, and remote opportunities 
+            in offensive security, red teaming, and network penetration testing.
+          </p>
+          <p>
+            Whether you're building a security team or need a targeted assessment — 
+            I deliver structured, evidence-based engagements with clear reporting.
+          </p>
+          <a href="mailto:khalidhamdy37@gmail.com" class="contact-email">
+            khalidhamdy37@gmail.com
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="contact-links reveal">
+          <a href="mailto:khalidhamdy37@gmail.com" class="contact-card">
+            <div class="cc-icon">✉</div>
+            <div>
+              <span class="cc-label">Email</span>
+              <span class="cc-val">khalidhamdy37@gmail.com</span>
+            </div>
+            <div class="cc-arrow">→</div>
+          </a>
+          <a href="https://github.com/khaledhamdy404" target="_blank" class="contact-card">
+            <div class="cc-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.57v-2c-3.34.72-4.04-1.61-4.04-1.61-.54-1.37-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 013-.4 11.5 11.5 0 013 .4c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+            </div>
+            <div>
+              <span class="cc-label">GitHub</span>
+              <span class="cc-val">khaledhamdy404</span>
+            </div>
+            <div class="cc-arrow">→</div>
+          </a>
+          <a href="https://linkedin.com/in/khalidhamdy" target="_blank" class="contact-card">
+            <div class="cc-icon">in</div>
+            <div>
+              <span class="cc-label">LinkedIn</span>
+              <span class="cc-val">khalidhamdy</span>
+            </div>
+            <div class="cc-arrow">→</div>
+          </a>
+          <a href="https://www.hackerone.com" target="_blank" class="contact-card">
+            <div class="cc-icon">🏴</div>
+            <div>
+              <span class="cc-label">Bug Bounty</span>
+              <span class="cc-val">HackerOne · Bugcrowd</span>
+            </div>
+            <div class="cc-arrow">→</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">KH<span class="accent">.</span></span>
+        <span class="footer-copy">© 2026 Khaled Hamdy · Egypt</span>
+        <span class="footer-motto">"Think like an attacker. Build like a defender."</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
